@@ -1,27 +1,31 @@
 <?php
 
-
 require 'config.php';
+
 require 'class/job1.class.php';
 
-use Job1\Loader;
+use Job1\Job1;
 
 use PHPUnit\Framework\TestCase;
 
 
-class ExceptionTest extends TestCase
+class Job1Test extends TestCase
 {
 
     public function testMakeDirectory() {
 
-        $l=new Loader();
+        $l=new Job1();
         $this->assertTrue($l->makeDirectory());
 
     }
 
     public function testLoader() {
-        $content = file_get_contents('hotelAll0.xml');
-        $xmlIterator = new SimpleXMLIterator($content);
+
+        $l=new Job1();
+
+        $xmlIterator = $l->getIterator('hotelAll0.xml' );
+
+        $this->assertInstanceOf(SimpleXMLIterator::class, $xmlIterator);
 
         $this->assertEquals(5287, $xmlIterator->count());
 
@@ -34,6 +38,16 @@ class ExceptionTest extends TestCase
         $this->assertEquals('New York-New York Hotel', (String) $hotel->name);
 
     }
+
+public function testGoodURL() {
+        global $url;
+
+    $l=new Job1();
+    $xmlIterator = $l->getIterator($url);
+
+    $this->assertInstanceOf(SimpleXMLIterator::class, $xmlIterator);
+
+}
 
 
 }
