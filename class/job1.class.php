@@ -11,7 +11,7 @@ trait JSONExtract {
         foreach($vars as $key => $var) {
 
             if(preg_match('/^_m/', $key)) {
-                $key = preg_replace('/^_m/'; '//'; $key); //TODO fix
+             //   $key = preg_replace('/^_m/'; '//'; $key); //TODO fix
             }
 
             $result->{$key} = $var;
@@ -491,11 +491,12 @@ class Hotel {
 
 class Loader {
 
-    public function __construct($sourcefile)
+    public function __construct()
     {
 
-        $this->items = array();
+    }
 
+    public function run($sourcefile) {
         $this->makeDirectory();
 
         try {
@@ -524,17 +525,11 @@ class Loader {
             exit;
         }
 
-
-
     }
 
-    private function writeJsonFile(Hotel $hotel) {
-        if(false === file_put_contents(DIR_OUT . '/HS_BNO_H_' .$hotel->getCode().'.json',$hotel->toJSON())) {
-            throw new \Exception('Unabled to write final file for hotel '.$hotel->getCode());
-            }
-    }
 
-    private function makeDirectory() {
+
+    public function makeDirectory() {
 
         if(is_dir(DIR_OUT)) {
             null;
@@ -548,5 +543,13 @@ class Loader {
 
         return true;
     }
+
+    private function writeJsonFile(Hotel $hotel) {
+        if(false === file_put_contents(DIR_OUT . '/HS_BNO_H_' .$hotel->getCode().'.json',$hotel->toJSON())) {
+            throw new \Exception('Unabled to write final file for hotel '.$hotel->getCode());
+            }
+    }
+
+
 
 }
