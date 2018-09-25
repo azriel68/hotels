@@ -4,32 +4,69 @@ namespace job1;
 
 trait JSONExtract {
     public function toJSON() {
+        $vars = get_object_vars($this);
+
+        $result = new \stdClass();
+
+        foreach($vars as $key => $var) {
+
+            if(preg_match('/^_m/', $key)) {
+                $key = preg_replace('/^_m/'; '//'; $key); //TODO fix
+            }
+
+            $result->{$key} = $var;
+        }
         return json_encode($this);
     }
+}
+
+class IntroductionMedia {
+    public $type;
+    public $weight;
+    public $size;
+    public $url;
+
+    public function setFromURL($url) {
+
+        $content = file_get_contents($url);
+
+        list($h, $w) = getimagesizefromstring($content);
+
+        $this->setSize();
+    }
+}
+
+class IntroductionText {
+
+    public $language;
+    public $type_code;
+    public $title;
+    public $text;
+
 }
 
 class HotelDistribution {
 
     use JSONExtract;
 
-    private $m_bonotel;
-    private $m_gta;
-    private $m_ati;
+    public $bonotel;
+    public $gta;
+    public $ati;
 
     /**
      * @return string
      */
     public function getBonotel()
     {
-        return $this->m_bonotel;
+        return $this->bonotel;
     }
 
     /**
-     * @param string $m_bonotel
+     * @param string $bonotel
      */
-    public function setBonotel($m_bonotel)
+    public function setBonotel($bonotel)
     {
-        $this->m_bonotel = $m_bonotel;
+        $this->bonotel = $bonotel;
     }
 
     /**
@@ -37,15 +74,15 @@ class HotelDistribution {
      */
     public function getGta()
     {
-        return $this->m_gta;
+        return $this->gta;
     }
 
     /**
-     * @param string $m_gta
+     * @param string $gta
      */
-    public function setGta($m_gta)
+    public function setGta($gta)
     {
-        $this->m_gta = $m_gta;
+        $this->gta = $gta;
     }
 
     /**
@@ -53,15 +90,15 @@ class HotelDistribution {
      */
     public function getAti()
     {
-        return $this->m_ati;
+        return $this->ati;
     }
 
     /**
-     * @param string $m_ati
+     * @param string $ati
      */
-    public function setAti($m_ati)
+    public function setAti($ati)
     {
-        $this->m_ati = $m_ati;
+        $this->ati = $ati;
     }
 
 }
@@ -75,29 +112,42 @@ class Hotel {
 
     public $latitude;
     public $longitude;
-    public  $m_nature;
-    public  $m_language;
-    public  $m_rating_description;
-    public  $m_rating_level;
-    public  $m_swimmingpool;
-    public  $m_parking;
-    public  $m_fitness;
-    public  $m_golf;
-    public  $m_seaside;
-    public  $m_spa;
-    public  $m_charm;
-    public  $m_ecotourism;
-    public  $m_exceptional;
-    public  $m_family_friendly;
-    public  $m_pmr;
-    public  $m_preferred;
-    public  $m_wedding;
+    public  $nature;
+    public  $language;
+    public  $rating_description;
+    public  $rating_level;
+    public  $swimmingpool;
+    public  $parking;
+    public  $fitness;
+    public  $golf;
+    public  $seaside;
+    public  $spa;
+    public  $charm;
+    public  $ecotourism;
+    public  $exceptional;
+    public  $family_friendly;
+    public  $pmr;
+    public  $preferred;
+    public  $wedding;
 
-    public   $m_distributon;
+    public  $distributon;
+
+    public  $introduction_texts;
+    public  $introduction_medias;
 
     public function __construct()
     {
+        $this->introduction_texts = array();
+
         $this->setDistributon( new HotelDistribution() );
+    }
+
+    public function addIntroductionText(IntroductionText $introductionText) {
+        $this->introduction_texts[] = $introductionText;
+    }
+
+    public function addIntroductionMedia(IntroductionMedia $introductionMedia) {
+        $this->introduction_medias[] = $introductionMedia;
     }
 
     /**
@@ -109,11 +159,11 @@ class Hotel {
     }
 
     /**
-     * @param mixed $m_code
+     * @param mixed $code
      */
-    public function setCode($m_code)
+    public function setCode($code)
     {
-        $this->code = (int) $m_code;
+        $this->code = (int) $code;
     }
 
     /**
@@ -121,15 +171,15 @@ class Hotel {
      */
     public function getDistributon()
     {
-        return $this->m_distributon;
+        return $this->distributon;
     }
 
     /**
-     * @param HotelDistribution $m_distributon
+     * @param HotelDistribution $distributon
      */
-    public function setDistributon(HotelDistribution $m_distributon)
+    public function setDistributon(HotelDistribution $distributon)
     {
-        $this->m_distributon = $m_distributon;
+        $this->distributon = $distributon;
     }
 
     /**
@@ -141,11 +191,11 @@ class Hotel {
     }
 
     /**
-     * @param mixed $m_latitude
+     * @param mixed $latitude
      */
-    public function setLatitude($m_latitude)
+    public function setLatitude($latitude)
     {
-        $this->latitude = (String) $m_latitude;
+        $this->latitude = (String) $latitude;
     }
 
     /**
@@ -157,11 +207,11 @@ class Hotel {
     }
 
     /**
-     * @param mixed $m_longitude
+     * @param mixed $longitude
      */
-    public function setLongitude($m_longitude)
+    public function setLongitude($longitude)
     {
-        $this->longitude =  (String) $m_longitude;
+        $this->longitude =  (String) $longitude;
     }
 
     /**
@@ -169,15 +219,15 @@ class Hotel {
      */
     public function getNature()
     {
-        return $this->m_nature;
+        return $this->nature;
     }
 
     /**
-     * @param mixed $m_nature
+     * @param mixed $nature
      */
-    public function setNature($m_nature)
+    public function setNature($nature)
     {
-        $this->m_nature = $m_nature;
+        $this->nature = $nature;
     }
 
     /**
@@ -185,15 +235,15 @@ class Hotel {
      */
     public function getLanguage()
     {
-        return $this->m_language;
+        return $this->language;
     }
 
     /**
-     * @param mixed $m_language
+     * @param mixed $language
      */
-    public function setLanguage($m_language)
+    public function setLanguage($language)
     {
-        $this->m_language = $m_language;
+        $this->language = $language;
     }
 
     /**
@@ -201,15 +251,15 @@ class Hotel {
      */
     public function getRatingDescription()
     {
-        return $this->m_rating_description;
+        return $this->rating_description;
     }
 
     /**
-     * @param mixed $m_rating_description
+     * @param mixed $rating_description
      */
-    public function setRatingDescription($m_rating_description)
+    public function setRatingDescription($rating_description)
     {
-        $this->m_rating_description = $m_rating_description;
+        $this->rating_description = $rating_description;
     }
 
     /**
@@ -217,15 +267,15 @@ class Hotel {
      */
     public function getRatingLevel()
     {
-        return $this->m_rating_level;
+        return $this->rating_level;
     }
 
     /**
-     * @param mixed $m_rating_level
+     * @param mixed $rating_level
      */
-    public function setRatingLevel($m_rating_level)
+    public function setRatingLevel($rating_level)
     {
-        $this->m_rating_level = $m_rating_level;
+        $this->rating_level = $rating_level;
     }
 
     /**
@@ -233,15 +283,15 @@ class Hotel {
      */
     public function getSwimmingpool()
     {
-        return $this->m_swimmingpool;
+        return $this->swimmingpool;
     }
 
     /**
-     * @param mixed $m_swimmingpool
+     * @param mixed $swimmingpool
      */
-    public function setSwimmingpool($m_swimmingpool)
+    public function setSwimmingpool($swimmingpool)
     {
-        $this->m_swimmingpool = $m_swimmingpool;
+        $this->swimmingpool = $swimmingpool;
     }
 
     /**
@@ -249,15 +299,15 @@ class Hotel {
      */
     public function getParking()
     {
-        return $this->m_parking;
+        return $this->parking;
     }
 
     /**
-     * @param mixed $m_parking
+     * @param mixed $parking
      */
-    public function setParking($m_parking)
+    public function setParking($parking)
     {
-        $this->m_parking = $m_parking;
+        $this->parking = $parking;
     }
 
     /**
@@ -265,15 +315,15 @@ class Hotel {
      */
     public function getFitness()
     {
-        return $this->m_fitness;
+        return $this->fitness;
     }
 
     /**
-     * @param mixed $m_fitness
+     * @param mixed $fitness
      */
-    public function setFitness($m_fitness)
+    public function setFitness($fitness)
     {
-        $this->m_fitness = $m_fitness;
+        $this->fitness = $fitness;
     }
 
     /**
@@ -281,15 +331,15 @@ class Hotel {
      */
     public function getGolf()
     {
-        return $this->m_golf;
+        return $this->golf;
     }
 
     /**
-     * @param mixed $m_golf
+     * @param mixed $golf
      */
-    public function setGolf($m_golf)
+    public function setGolf($golf)
     {
-        $this->m_golf = $m_golf;
+        $this->golf = $golf;
     }
 
     /**
@@ -297,15 +347,15 @@ class Hotel {
      */
     public function getSeaside()
     {
-        return $this->m_seaside;
+        return $this->seaside;
     }
 
     /**
-     * @param mixed $m_seaside
+     * @param mixed $seaside
      */
-    public function setSeaside($m_seaside)
+    public function setSeaside($seaside)
     {
-        $this->m_seaside = $m_seaside;
+        $this->seaside = $seaside;
     }
 
     /**
@@ -313,15 +363,15 @@ class Hotel {
      */
     public function getSpa()
     {
-        return $this->m_spa;
+        return $this->spa;
     }
 
     /**
-     * @param mixed $m_spa
+     * @param mixed $spa
      */
-    public function setSpa($m_spa)
+    public function setSpa($spa)
     {
-        $this->m_spa = $m_spa;
+        $this->spa = $spa;
     }
 
     /**
@@ -329,15 +379,15 @@ class Hotel {
      */
     public function getCharm()
     {
-        return $this->m_charm;
+        return $this->charm;
     }
 
     /**
-     * @param mixed $m_charm
+     * @param mixed $charm
      */
-    public function setCharm($m_charm)
+    public function setCharm($charm)
     {
-        $this->m_charm = $m_charm;
+        $this->charm = $charm;
     }
 
     /**
@@ -345,15 +395,15 @@ class Hotel {
      */
     public function getEcotourism()
     {
-        return $this->m_ecotourism;
+        return $this->ecotourism;
     }
 
     /**
-     * @param mixed $m_ecotourism
+     * @param mixed $ecotourism
      */
-    public function setEcotourism($m_ecotourism)
+    public function setEcotourism($ecotourism)
     {
-        $this->m_ecotourism = $m_ecotourism;
+        $this->ecotourism = $ecotourism;
     }
 
     /**
@@ -361,15 +411,15 @@ class Hotel {
      */
     public function getExceptional()
     {
-        return $this->m_exceptional;
+        return $this->exceptional;
     }
 
     /**
-     * @param mixed $m_exceptional
+     * @param mixed $exceptional
      */
-    public function setExceptional($m_exceptional)
+    public function setExceptional($exceptional)
     {
-        $this->m_exceptional = $m_exceptional;
+        $this->exceptional = $exceptional;
     }
 
     /**
@@ -377,15 +427,15 @@ class Hotel {
      */
     public function getFamilyFriendly()
     {
-        return $this->m_family_friendly;
+        return $this->family_friendly;
     }
 
     /**
-     * @param mixed $m_family_friendly
+     * @param mixed $family_friendly
      */
-    public function setFamilyFriendly($m_family_friendly)
+    public function setFamilyFriendly($family_friendly)
     {
-        $this->m_family_friendly = $m_family_friendly;
+        $this->family_friendly = $family_friendly;
     }
 
     /**
@@ -393,15 +443,15 @@ class Hotel {
      */
     public function getPmr()
     {
-        return $this->m_pmr;
+        return $this->pmr;
     }
 
     /**
-     * @param mixed $m_pmr
+     * @param mixed $pmr
      */
-    public function setPmr($m_pmr)
+    public function setPmr($pmr)
     {
-        $this->m_pmr = $m_pmr;
+        $this->pmr = $pmr;
     }
 
     /**
@@ -409,15 +459,15 @@ class Hotel {
      */
     public function getPreferred()
     {
-        return $this->m_preferred;
+        return $this->preferred;
     }
 
     /**
-     * @param mixed $m_preferred
+     * @param mixed $preferred
      */
-    public function setPreferred($m_preferred)
+    public function setPreferred($preferred)
     {
-        $this->m_preferred = $m_preferred;
+        $this->preferred = $preferred;
     }
 
     /**
@@ -425,15 +475,15 @@ class Hotel {
      */
     public function getWedding()
     {
-        return $this->m_wedding;
+        return $this->wedding;
     }
 
     /**
-     * @param mixed $m_wedding
+     * @param mixed $wedding
      */
-    public function setWedding($m_wedding)
+    public function setWedding($wedding)
     {
-        $this->m_wedding = $m_wedding;
+        $this->wedding = $wedding;
     }
 
 
