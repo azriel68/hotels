@@ -23,6 +23,7 @@ class IntroductionMedia {
 class IntroductionText {
 
     use \Job1\JSONExtract;
+
     private $m_language;
     private $m_type_code;
     private $m_title;
@@ -66,57 +67,22 @@ class HotelDistribution {
 
     use \Job1\JSONExtract;
 
-    private $m_BONOTEL;
-    private $m_GTA;
-    private $m_ATI;
-
     /**
      * @return string
      */
-    public function getBonotel()
+    public function getTravellerKey($traveller)
     {
-        return $this->m_BONOTEL;
+        return isset($this->{$traveller}) ? $this->{$traveller} : false;
     }
 
     /**
      * @param string $bonotel
      */
-    public function setBonotel($bonotel)
+    public function setTravellerKey($traveller, $key)
     {
-        $this->m_BONOTEL = $bonotel;
+        $this->{$traveller}=(String) $key;
     }
 
-    /**
-     * @return string
-     */
-    public function getGta()
-    {
-        return $this->m_GTA;
-    }
-
-    /**
-     * @param string $gta
-     */
-    public function setGta($gta)
-    {
-        $this->m_GTA = $gta;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAti()
-    {
-        return $this->m_ATI;
-    }
-
-    /**
-     * @param string $ati
-     */
-    public function setAti($ati)
-    {
-        $this->m_ATI = $ati;
-    }
 
 }
 
@@ -187,6 +153,7 @@ class Hotel {
                 else if(preg_match('/(spa|spas)/', $match)) $this->setSpa(true);
                 else if(preg_match('/(fitness)/', $match)) $this->setFitness(true);
                 else if(preg_match('/(golf)/', $match)) $this->setGolf(true);
+                else if(preg_match('/(weddings|wedding)/', $match)) $this->setWedding(true);
 
             }
         }
@@ -336,7 +303,7 @@ class Hotel {
      */
     public function setLanguage($language)
     {
-        $this->m_language = $language;
+        $this->m_language = (String) $language;
     }
 
     /**
@@ -564,19 +531,19 @@ class Hotel {
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getWedding()
     {
-        return $this->wedding;
+        return $this->m_wedding;
     }
 
     /**
-     * @param mixed $wedding
+     * @param bool $wedding
      */
     public function setWedding($wedding)
     {
-        $this->wedding = $wedding;
+        $this->m_wedding = (bool)$wedding;
     }
 
     private function getListFromHTML(\SimpleXMLIterator $xmlIterator) {

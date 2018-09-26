@@ -15,6 +15,14 @@ trait JSONExtract {
      * @return false|string
      */
     public function toJSON() {
+
+        $obj = $this->getStdObject();
+
+        return json_encode($obj);
+    }
+
+    public function getStdObject() {
+
         $vars = get_object_vars($this);
 
         $result = new \stdClass();
@@ -25,11 +33,23 @@ trait JSONExtract {
                 $key = preg_replace('/^m_/i','',$key);
             }
 
+            if(is_object($var) && method_exists($var, 'getStdObject')) {
+                $var = $var->getStdObject();
+            }
+            else if(is_array($var)) { /* Et là je me dis que si j'avais laissé un objet stdCLass comme je l'avais fait au début, j'aurai un code moins WTF :-/ */
+                foreach($var as $k=>&$v) {
+                    if(is_object($v) && method_exists($v, 'getStdObject')) {
+                        $v = $v->getStdObject();
+                    }
+                }
+            }
+
+
             $result->{$key} = $var;
 
         }
 
-        return json_encode($result);
+        return $result;
     }
 }
 
@@ -130,14 +150,14 @@ class Job1 {
             $hotel->setLongitude($raw->longitude);
 
             $distribution = new \Hotel\HotelDistribution();
-            $distribution->setBonotel('123');
-            $distribution->setAti('234');
-            $distribution->setGta('345');
-
+            $distribution->setTravellerKey('BONOTEL',$raw->hotelCode);
+ /*         $distribution->setAti();
+            $distribution->setGta();
+*/
             $hotel->setDistributon($distribution);
 
-            $hotel->setNature('BeachHotel');
-            $hotel->setLanguage('FR');
+            $hotel->setNature('Unknown');
+            $hotel->setLanguage($raw->countryCode);
             $hotel->setRatingDescription($raw->starRating);
             $hotel->setRatingLevel($raw->starRating);
 

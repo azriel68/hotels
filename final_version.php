@@ -11,8 +11,9 @@ if ($env === PROD && substr($sapi_type, 0, 3) == 'CLI') {
     exit(-1);
 }
 
-require 'class\job1.class.php';
-require 'class\hotel.class.php';
+
+require './class/job1.class.php';
+require './class/hotel.class.php';
 
 use Job1\Job1;
 
