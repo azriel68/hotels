@@ -24,6 +24,7 @@ mais je suppose que tu regardes aussi notre capacité d'analyse (et si c'est de 
 
 Tout le code a été pensé pour être réexploitable dans le cadre d'autre import de l'objet Hotel.
 NB : certaines méthodes sont publiques uniquement à cause des tests unitaires
+NB 2 : Je suis surpris que la balise name ne soit pas reprise ?
 
 **Commande pour lancer l'import**
 
