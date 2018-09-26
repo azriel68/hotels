@@ -7,6 +7,7 @@ const DIR_OUT = './hotels';
 
 const MAPPING = 'bonhotel';
 
-$env = DEV;
+const ENV = DEV;
 
-$url = ($env === DEV) ? './hotelAll0.xml' :  'http://api.bonotel.com/index.cfm/user/voyagrs_xml/action/hotel';
+$url = (ENV === DEV) ? './hotelAll0.xml' :  'http://api.bonotel.com/index.cfm/user/voyagrs_xml/action/hotel';
+//$url = './hotel1.xml';

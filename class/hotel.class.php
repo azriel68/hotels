@@ -2,6 +2,10 @@
 
 namespace Hotel;
 
+/**
+ * Class IntroductionMedia
+ * @package Hotel
+ */
 class IntroductionMedia {
     use \Job1\JSONExtract;
 
@@ -10,16 +14,101 @@ class IntroductionMedia {
     private $m_size;
     private $m_url;
 
-    public function setFromURL($url) {
+    /**
+     * @param string $url
+     * @param string $type
+     */
+    public function setFromURL($url, $type) {
+
+        if(ENV === DEV)$url = '2989.jpg'; /* Juste parce qu'en prod ça prend sa vie ;-) */
 
         $content = file_get_contents($url);
 
         list($h, $w) = getimagesizefromstring($content);
 
-        $this->setSize();
+        $this->setSize($h, $w);
+        $this->setWeight(strlen($content));
+        $this->setUrl($url);
+        $this->setType($type);
     }
+
+    /**
+     * @param int $h
+     * @param int $w
+     */
+    public function setSize($h, $w) {
+
+        $obj = new \stdClass();
+        $obj->width = (int)$w;
+        $obj->height = (int)$h;
+        $obj->unit = 'px';
+
+        $this->m_size = $obj;
+
+    }
+
+    /**
+     * @param int $weight
+     */
+    public function setWeight($weight) {
+
+        $obj = new \stdClass();
+        $obj->value = (int)$weight;
+        $obj->unit = 'Byte';
+
+        $this->m_weight = $obj;
+
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl($url) {
+        $this->m_url = (string)$url;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type) {
+        $this->m_type = (string)$type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl() {
+        return $this->m_url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType() {
+        return $this->m_type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSize() {
+        return $this->m_size;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeight() {
+        return $this->m_weight;
+    }
+
+
 }
 
+/**
+ * Class IntroductionText
+ * @package Hotel
+ */
 class IntroductionText {
 
     use \Job1\JSONExtract;
@@ -32,37 +121,37 @@ class IntroductionText {
     /**
      * @param mixed $language
      */
-    public function setLanguage($language)
-    {
-        $this->m_language = (String) $language;
+    public function setLanguage($language) {
+        $this->m_language = (String)$language;
     }
 
     /**
      * @param mixed $type_code
      */
-    public function setTypeCode($type_code)
-    {
-        $this->m_type_code =(String)  $type_code;
+    public function setTypeCode($type_code) {
+        $this->m_type_code = (String)$type_code;
     }
 
     /**
      * @param mixed $title
      */
-    public function setTitle($title)
-    {
-        $this->m_title =(String)  $title;
+    public function setTitle($title) {
+        $this->m_title = (String)$title;
     }
 
     /**
      * @param mixed $text
      */
-    public function setMText($text)
-    {
-        $this->m_text =(String)  $text;
+    public function setMText($text) {
+        $this->m_text = (String)$text;
     }
 
 }
 
+/**
+ * Class HotelDistribution
+ * @package Hotel
+ */
 class HotelDistribution {
 
     use \Job1\JSONExtract;
@@ -70,28 +159,28 @@ class HotelDistribution {
     /**
      * @return string
      */
-    public function getTravellerKey($traveller)
-    {
+    public function getTravellerKey($traveller) {
         return isset($this->{$traveller}) ? $this->{$traveller} : false;
     }
 
     /**
      * @param string $bonotel
      */
-    public function setTravellerKey($traveller, $key)
-    {
-        $this->{$traveller}=(String) $key;
+    public function setTravellerKey($traveller, $key) {
+        $this->{$traveller} = (String)$key;
     }
 
 
 }
 
 
+/**
+ * Class Hotel
+ * @package Hotel
+ */
 class Hotel {
 
     use \Job1\JSONExtract;
-
-    private $m_code;
 
     private $m_latitude;
     private $m_longitude;
@@ -118,12 +207,11 @@ class Hotel {
     private $m_introduction_texts;
     private $m_introduction_medias;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->m_introduction_texts = array();
         $this->m_introduction_medias = array();
 
-        $this->m_distribution = new HotelDistribution() ;
+        $this->m_distribution = new HotelDistribution();
 
         $this->m_swimmingpool = false;
         $this->m_parking = false;
@@ -142,61 +230,45 @@ class Hotel {
     }
 
 
+    /**
+     * Extract some tags from recreation and add it as introductionText
+     * @param \SimpleXMLIterator $xmlIterator
+     */
     public function setRecreation(\SimpleXMLIterator $xmlIterator) {
 
         $matches = $this->getListFromHTML($xmlIterator);
 
-        if(!empty($matches)) {
+        if (!empty($matches)) {
             foreach ($matches[1] as $match) {
 
-                if(preg_match('/(pools|swimming\spool)/', $match)) $this->setSwimmingpool(true);
-                else if(preg_match('/(spa|spas)/', $match)) $this->setSpa(true);
-                else if(preg_match('/(fitness)/', $match)) $this->setFitness(true);
-                else if(preg_match('/(golf)/', $match)) $this->setGolf(true);
-                else if(preg_match('/(weddings|wedding)/', $match)) $this->setWedding(true);
+                if (preg_match('/(pools|swimming\spool)/i', $match)) {
+                    $this->setSwimmingpool(true);
+                }
+                if (preg_match('/(spa|spas)/i', $match)) {
+                    $this->setSpa(true);
+                }
+                if (preg_match('/(fitness)/i', $match)) {
+                    $this->setFitness(true);
+                }
+                if (preg_match('/(golf)/i', $match)) {
+                    $this->setGolf(true);
+                }
+                if (preg_match('/(weddings|wedding)/i', $match)) {
+                    $this->setWedding(true);
+                }
 
             }
         }
 
-        $this->addIntroductionText((String)$xmlIterator,'Recreation');
+        $this->addIntroductionText((String)$xmlIterator, 'Recreation');
     }
 
-    public function setFacilities(\SimpleXMLIterator $xmlIterator) {
-
-        $matches = $this->getListFromHTML($xmlIterator);
-
-        if(!empty($matches)) {
-            foreach ($matches[1] as $match) {
-
-                if(preg_match('/(parking|self-parking)/', $match)) $this->setParking(true);
-
-
-            }
-        }
-
-        $this->addIntroductionText((String)$xmlIterator,'Facilities');
-    }
-
-    public function setDescription(\SimpleXMLIterator $xmlIterator) {
-
-        $matches = $this->getListFromHTML($xmlIterator);
-
-        if(!empty($matches)) {
-            foreach ($matches[1] as $match) {
-
-                if(preg_match('/(seaside)/', $match)) $this->setSeaside(true);
-                else if(preg_match('/(charms|charming)/', $match)) $this->setCharm(true);
-                else if(preg_match('/(eco-friendly|ecotour)/', $match)) $this->setEcotourism(true);
-
-
-            }
-        }
-
-        $this->addIntroductionText((String)$xmlIterator,'Description');
-    }
-
+    /**
+     * @param string $introductionText
+     * @param string $type
+     */
     public function addIntroductionText($introductionText, $type) {
-        $it=new \Hotel\IntroductionText();
+        $it = new \Hotel\IntroductionText();
         $it->setLanguage($this->m_language);
         $it->setMText($introductionText);
         $it->setTitle($type); /* ok it's a bad choice, but i have to check the project manager what */
@@ -206,354 +278,374 @@ class Hotel {
         $this->introduction_texts[] = $it;
     }
 
+    /**
+     * Extract some tags from facilities and add it as introductionText
+     * @param \SimpleXMLIterator $xmlIterator
+     */
+    public function setFacilities(\SimpleXMLIterator $xmlIterator) {
+
+        $matches = $this->getListFromHTML($xmlIterator);
+
+        if (!empty($matches)) {
+            foreach ($matches[1] as $match) {
+
+                if (preg_match('/(parking|self-parking|self parking)/i', $match)) {
+                    $this->setParking(true);
+                }
+                if (preg_match('/(handicap|wheelchair|wheelchairs)/i', $match)) {
+                    $this->setPmr(true);
+                }
+
+            }
+        }
+
+        $this->addIntroductionText((String)$xmlIterator, 'Facilities');
+    }
+
+    /**
+     * Extract some tags from description and add description as introductionText
+     * @param \SimpleXMLIterator $xmlIterator
+     */
+    public function setDescription(\SimpleXMLIterator $xmlIterator) {
+
+        $matches = $this->getListFromHTML($xmlIterator);
+
+        if (!empty($matches)) {
+            foreach ($matches[1] as $match) {
+
+                if (preg_match('/(seaside)/i', $match)) {
+                    $this->setSeaside(true);
+                }
+                if (preg_match('/(charms|charming)/i', $match)) {
+                    $this->setCharm(true);
+                }
+                if (preg_match('/(eco-friendly|ecotour)/i', $match)) {
+                    $this->setEcotourism(true);
+                }
+                if (preg_match('/(family-friendly)/i', $match)) {
+                    $this->setFamilyFriendly(true);
+                }
+                if (preg_match('/(preferred choice)/i', $match)) {
+                    $this->setPreferred(true);
+                }
+
+            }
+        }
+
+        $this->addIntroductionText((String)$xmlIterator, 'Description');
+    }
+
+    /**
+     * @param \SimpleXMLIterator $xmlIterator
+     * @param $type
+     */
+    public function setImages(\SimpleXMLIterator $xmlIterator, $type) {
+        $xml = new \SimpleXMLElement($xmlIterator->asXML());
+        foreach ($xml->children() as $child) {
+            $image = (string)$child;
+
+            $im = new \Hotel\IntroductionMedia();
+            $im->setFromURL($image, $type);
+
+            $this->addIntroductionMedia($im);
+        }
+
+    }
+
+    /**
+     * @param IntroductionMedia $introductionMedia
+     */
     public function addIntroductionMedia(IntroductionMedia $introductionMedia) {
         $this->introduction_medias[] = $introductionMedia;
     }
 
     /**
-     * @return integer
-     */
-    public function getCode()
-    {
-        return $this->m_code;
-    }
-
-    /**
-     * @param mixed $m_code
-     */
-    public function setCode($m_code)
-    {
-        $this->m_code = (int) $m_code;
-    }
-
-    /**
      * @return HotelDistribution
      */
-    public function getDistributon()
-    {
+    public function getDistribution() {
         return $this->m_distribution;
     }
 
     /**
      * @param HotelDistribution $distribution
      */
-    public function setDistributon(HotelDistribution $distribution)
-    {
-        $this->m_distribution= $distribution;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLatitude()
-    {
-        return $this->m_latitude;
-    }
-
-    /**
-     * @param mixed $latitude
-     */
-    public function setLatitude($latitude)
-    {
-        $this->m_latitude = (String) $latitude;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLongitude()
-    {
-        return $this->m_longitude;
-    }
-
-    /**
-     * @param mixed $longitude
-     */
-    public function setLongitude($longitude)
-    {
-        $this->m_longitude =  (String) $longitude;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNature()
-    {
-        return $this->m_nature;
-    }
-
-    /**
-     * @param mixed $nature
-     */
-    public function setNature($nature)
-    {
-        $this->m_nature = (String) $nature;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLanguage()
-    {
-        return $this->m_language;
-    }
-
-    /**
-     * @param mixed $language
-     */
-    public function setLanguage($language)
-    {
-        $this->m_language = (String) $language;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRatingDescription()
-    {
-        return $this->m_rating_description;
-    }
-
-    /**
-     * @param mixed $rating_description
-     */
-    public function setRatingDescription($rating_description)
-    {
-        $this->m_rating_description = (String) $rating_description;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRatingLevel()
-    {
-        return $this->m_rating_level;
-    }
-
-    /**
-     * @param mixed $rating_level
-     */
-    public function setRatingLevel($rating_level)
-    {
-        $this->m_rating_level =(int) $rating_level; /* a little ugly to convert string to int, but it is simple ;-) */
-    }
-
-    /**
-     * @return bool
-     */
-    public function getSwimmingpool()
-    {
-        return $this->m_swimmingpool;
+    public function setDistribution(HotelDistribution $distribution) {
+        $this->m_distribution = $distribution;
     }
 
     /**
      * @param bool $swimmingpool
      */
-    public function setSwimmingpool($swimmingpool)
-    {
+    public function setSwimmingpool($swimmingpool) {
         $this->m_swimmingpool = (bool)$swimmingpool;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getParking()
-    {
-        return $this->m_parking;
-    }
-
-    /**
-     * @param bool $parking
-     */
-    public function setParking($parking)
-    {
-        $this->m_parking = (bool)$parking;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFitness()
-    {
-        return $this->m_fitness;
-    }
-
-    /**
-     * @param mixed $fitness
-     */
-    public function setFitness($fitness)
-    {
-        $this->m_fitness = (bool) $fitness;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getGolf()
-    {
-        return $this->m_golf;
-    }
-
-    /**
-     * @param bool $golf
-     */
-    public function setGolf($golf)
-    {
-        $this->m_golf = (bool)$golf;
-    }
-
-    /**
-     * @return
-     */
-    public function getSeaside()
-    {
-        return $this->m_seaside;
-    }
-
-    /**
-     * @param bool $seaside
-     */
-    public function setSeaside($seaside)
-    {
-        $this->m_seaside = (bool)$seaside;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getSpa()
-    {
-        return $this->m_spa;
     }
 
     /**
      * @param bool $spa
      */
-    public function setSpa($spa)
-    {
-        $this->m_spa =(bool) $spa;
+    public function setSpa($spa) {
+        $this->m_spa = (bool)$spa;
     }
 
     /**
-     * @return mixed
+     * @param bool $fitness
      */
-    public function getCharm()
-    {
-        return $this->m_charm;
+    public function setFitness($fitness) {
+        $this->m_fitness = (bool)$fitness;
     }
 
     /**
-     * @param mixed $charm
+     * @param bool $golf
      */
-    public function setCharm($charm)
-    {
-        $this->m_charm = (bool) $charm;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getEcotourism()
-    {
-        return $this->m_ecotourism;
-    }
-
-    /**
-     * @param bool $ecotourism
-     */
-    public function setEcotourism($ecotourism)
-    {
-        $this->m_ecotourism = (bool) $ecotourism;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getExceptional()
-    {
-        return $this->exceptional;
-    }
-
-    /**
-     * @param mixed $exceptional
-     */
-    public function setExceptional($exceptional)
-    {
-        $this->exceptional = $exceptional;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFamilyFriendly()
-    {
-        return $this->family_friendly;
-    }
-
-    /**
-     * @param mixed $family_friendly
-     */
-    public function setFamilyFriendly($family_friendly)
-    {
-        $this->family_friendly = $family_friendly;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPmr()
-    {
-        return $this->pmr;
-    }
-
-    /**
-     * @param mixed $pmr
-     */
-    public function setPmr($pmr)
-    {
-        $this->pmr = $pmr;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPreferred()
-    {
-        return $this->preferred;
-    }
-
-    /**
-     * @param mixed $preferred
-     */
-    public function setPreferred($preferred)
-    {
-        $this->preferred = $preferred;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getWedding()
-    {
-        return $this->m_wedding;
+    public function setGolf($golf) {
+        $this->m_golf = (bool)$golf;
     }
 
     /**
      * @param bool $wedding
      */
-    public function setWedding($wedding)
-    {
+    public function setWedding($wedding) {
         $this->m_wedding = (bool)$wedding;
     }
 
-    private function getListFromHTML(\SimpleXMLIterator $xmlIterator) {
-        $xmlIterator->rewind();
-        $xml = (String) $xmlIterator->getChildren();
+    /**
+     * @param bool $parking
+     */
+    public function setParking($parking) {
+        $this->m_parking = (bool)$parking;
+    }
 
-        preg_match_all('/<li>(.*?)<\/li>/i', $xml, $matches);
+    /**
+     * @param bool $pmr
+     */
+    public function setPmr($pmr) {
+        $this->m_pmr = (bool)$pmr;
+    }
+    /**
+     * @param bool $seaside
+     */
+    public function setSeaside($seaside) {
+        $this->m_seaside = (bool)$seaside;
+    }
+
+    /**
+     * @param mixed $charm
+     */
+    public function setCharm($charm) {
+        $this->m_charm = (bool)$charm;
+    }
+
+    /**
+     * @param bool $ecotourism
+     */
+    public function setEcotourism($ecotourism) {
+        $this->m_ecotourism = (bool)$ecotourism;
+    }
+
+    /**
+     * @param bool $family_friendly
+     */
+    public function setFamilyFriendly($family_friendly) {
+        $this->m_family_friendly = (bool)$family_friendly;
+    }
+
+    /**
+     * @param bool $preferred
+     */
+    public function setPreferred($preferred) {
+        $this->m_preferred = (bool)$preferred;
+    }
+
+    /**
+     * @return String
+     */
+    public function getLatitude() {
+        return $this->m_latitude;
+    }
+
+    /**
+     * @param String $latitude
+     */
+    public function setLatitude($latitude) {
+        $this->m_latitude = (String)$latitude;
+    }
+
+    /**
+     * @return String
+     */
+    public function getLongitude() {
+        return $this->m_longitude;
+    }
+
+    /**
+     * @param String $longitude
+     */
+    public function setLongitude($longitude) {
+        $this->m_longitude = (String)$longitude;
+    }
+
+    /**
+     * @return String
+     */
+    public function getNature() {
+        return $this->m_nature;
+    }
+
+    /**
+     * @param String $nature
+     */
+    public function setNature($nature) {
+        $this->m_nature = (String)$nature;
+    }
+
+    /**
+     * @return String
+     */
+    public function getLanguage() {
+        return $this->m_language;
+    }
+
+    /**
+     * @param String $language
+     */
+    public function setLanguage($language) {
+        $this->m_language = (String)$language;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRatingDescription() {
+        return $this->m_rating_description;
+    }
+
+    /**
+     * @param string $rating_description
+     */
+    public function setRatingDescription($rating_description) {
+        $this->m_rating_description = (String)$rating_description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRatingLevel() {
+        return $this->m_rating_level;
+    }
+
+    /**
+     * @param int $rating_level
+     */
+    public function setRatingLevel($rating_level) {
+        $this->m_rating_level = (int)$rating_level; /* a little ugly to convert string to int, but it is simple ;-) */
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSwimmingpool() {
+        return $this->m_swimmingpool;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getParking() {
+        return $this->m_parking;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFitness() {
+        return $this->m_fitness;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getGolf() {
+        return $this->m_golf;
+    }
+
+    /**
+     * @return
+     */
+    public function getSeaside() {
+        return $this->m_seaside;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSpa() {
+        return $this->m_spa;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCharm() {
+        return $this->m_charm;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getEcotourism() {
+        return $this->m_ecotourism;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getExceptional() {
+        return $this->exceptional;
+    }
+
+    /**
+     * @param bool $exceptional
+     */
+    public function setExceptional($exceptional) {
+        $this->m_exceptional = (bool)$exceptional;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFamilyFriendly() {
+        return $this->m_family_friendly;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPmr() {
+        return $this->m_pmr;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPreferred() {
+        return $this->m_preferred;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getWedding() {
+        return $this->m_wedding;
+    }
+
+
+    private function getListFromHTML(\SimpleXMLIterator $xmlIterator, $patten = '/<li>(.*?)<\/li>/i') {
+        $xmlIterator->rewind();
+        $xml = (String)$xmlIterator->getChildren();
+
+        preg_match_all($patten, $xml, $matches);
 
         return $matches;
     }
-
 
 }

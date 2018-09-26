@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><hotels>
+   <hotel>
+		<hotelCode>5</hotelCode>
+		<name>New York-New York Hotel</name> 
+		<address>3790 Las Vegas Blvd. South</address> 
+		<address2/>
+		<city>Las Vegas</city>
+        <cityCode>CY191</cityCode>
+        <state>Nevada</state> 
+        <stateCode>NV</stateCode>
+		<country>USA</country>
+        <countryCode>US</countryCode>
+		<postalCode>89109</postalCode>
+        <checkIn>03:00 PM</checkIn> <checkOut>12:00 PM</checkOut> <phone>(702) 740-6969</phone> <fax>(702) 740-6700</fax>
+		<latitude>36.101517</latitude>
+        <longitude>-115.174448</longitude>
+       <cutoffAge>0</cutoffAge> <starRating>4star</starRating>
+        <images>
+		<image>http://legacy.bonotel.com/photos/11342.jpg</image> <image>http://legacy.bonotel.com/photos/3599.jpg</image>
+        </images> 
+		<cancelPolicies><![CDATA[<p>Applicable cancellation fees are subject to change at time of cancellation. Please be advised that the cancellation policy listed is also subject to change without notice at any time. For any concerns regarding cancellation policies/fees please contact a Bonotel representative. </p>]]></cancelPolicies> <limitationPolicies><![CDATA[<ul>
+<li>Maximum stay: 14 nights</li>
+<li>Minimum check-in age is 21 years</li>
+<li>Children are charged as adults</li>
+<li>Certain travel dates may require a minimum length of stay.</li>
+<li>Name/date changes are not allowed over stop sell dates</li>
+<li>No Shows and Early Departures are subject to 100% of the booking charges</li>
+<li>A valid credit card or debit card is required upon arrival to register and a $50/night incidental deposit will be charged to guests (subject to change).</li>
+<li><strong>MGM Resorts Parking Terms & Conditions: </strong>All fees and policies are subject to change. An additional full-day parking fee (self or valet) will be charged for each additional day or fraction of a day over the first 24 hours (no grace period). The self-parking fees at each MGM Resorts property is NOT applicable during special event pricing. Parking fees may be higher during special events. For registered hotel guests, the 24 hour parking fee (self or valet) includes "in and out" privileges at the guest's originating MGM Resort property and also includes the same "in and out" parking privileges at any other MGM Resort property within the same 24 hour period, subject to availability.<strong> LOST TICKET: </strong>If a guest loses their self-parking ticket, MGM Resorts properties will attempt to determin how long the guest's vehicle has been parked at the facility. If the property can verify how long the guest has been parked, the guest will be charged for the actual amount of time parked. If the property cannot verify how long the guest has been parked, the guest will be subject to a lost ticket parking fee of $30 (fee subject to change).</li>
+</ul>]]></limitationPolicies> <description><![CDATA[It&apos;s the center of everything you love about Las Vegas&#8212;with a distinctive New York-New York attitude! A valid credit card or debit card is required upon arrival to register and a $50/night incidental deposit will be charged to guests (subject to change). *A mandatory Daily Resort Fee is payable by guests directly at the hotel for both Package and Land Only (L/O) rate plans. Resort fee includes: Property-wide high speed internet access (public spaces and in-room), unlimited local and toll free calls, airline boarding pass printing, and fitness center access for guests 18+. All features and applicable charges are subject to change! Minimum check-in age is 21 years. Name/date changes are not allowed over stop sell dates. MGM Resorts Parking Terms &amp; Conditions: A fee based parking program will be implemented. Vehicles that are self-parked for more than one hour will be subject to a parking fee. Effective January 31, 2018, the self-parking fee is $9 for vehicles parked over 1 hour to 2 hours, $12 for vehicles parked over 2 hours to 4 hours, and $15 for vehicles parked over 4 hours to 24 hours. For vehicles self-parked over 24 hours, there is an additional self-parking fee of $15 for each additional day or fraction of a day over the first 24 hours. The valet parking fee is $16 for the first 2 hours (no grace period), $18 for over 2 hours to 4 hours and $24 for over 4 hours to 24 hours. For vehicles that are valet parked over 24 hours, there is an additional valet parking fee of $24 for each additional day or fraction of a day over the first 24 hours (no grace period). All fees and policies are subject to change. An additional full-day parking fee (self or valet) will be charged for each additional day or fraction of a day over the first 24 hours (no grace period). The self-parking fees at each MGM Resorts property is NOT applicable during special event pricing. Parking fees may be higher during special events. For registered hotel guests, the 24 hour parking fee (self or valet) includes &amp;apos;in and out&apos; privileges at the guest&apos;s originating MGM Resort property and also includes the same &apos;in and out&apos; parking privileges at any other MGM Resort property within the same 24 hour period, subject to availability. LOST TICKET: If a guest loses their self-parking ticket, MGM Resorts properties will attempt to determine how long the guest&apos;s vehicle has been parked at the facility. If the property can verify how long the guest has been parked, the guest will be charged for the actual amount of time parked. If the property cannot verify how long the guest has been parked, the guest will be subject to a lost ticket parking fee of $30 (fee subject to change).]]></description> <facilities><![CDATA[<ul>
+<li>2,024 Guestrooms including suites</li>
+<li>24 hour room service</li>
+<li>Personal, electronic safe</li>
+<li>24 hour room service</li>
+<li>Hair dryer</li>
+<li>Iron/Boards</li>
+<li>Digital movies</li>
+<li>Rollaway beds and cribs</li>
+<li>AM/FM clock radio</li>
+<li>Laundry/valet/dry cleaning</li>
+<li><strong>A </strong><strong>mandatory Daily Resort Fee is payable by guests directly at the hotel for both Package and Land Only (L/O) rate plans.</strong></li>
+<li>Resort fee includes:</li>
+<ul>
+<li>Property-wide high speed internet access (public spaces and in-room)</li>
+<li>Unlimited local and toll free calls</li>
+<li>Airline boarding pass printing</li>
+<li>Fitness center access for guest 18+</li>
+</ul>
+</ul>
+<p><strong>Effective January 31, 2018:</strong></p>
+
+<ul>
+<li>Self-Parking</li>
+<ul>
+<li>1 to 2 hours = $9</li>
+<li>2 to 4 hours = $12</li>
+<li>4 to 24 hours = $15</li>
+<li>Over 24 hours = $15 each additional day or fraction of a day over the first 24 hour period</li>
+</ul>
+<li>Valet Parking:</li>
+<ul>
+<li>0 to 2 hours = $16</li>
+<li>2 to 4 hours = $18</li>
+<li>4 to 24 hours = $24</li>
+<li>Over 24 hours = $24 each additional day or fraction of a day over the first 24 hour period</li>
+</ul>
+</ul>
+
+<p><em>*Parking fees subject to change. Vehicles that are self-parked for less than 1 hour will NOT be subject to a parking fee. For registered hotel guests, the 24 hour parking fee (self or valet) includes "in and out" privileges at the guest's originating MGM Resort property and also includes the same "in and out" parking privileges at any other MGM Resort property within the same 24 hour period, subject to availability.</em></p>]]></facilities> <recreation><![CDATA[<ul>
+<li>Casino</li>
+<li>The Spa & Regis Signature Salon</li>
+<li>Pool (seasonal)</li>
+<li>The high speed Roller Coaster</li>
+<li>Zumanity by Cirque du Soleil & Zumanity Boutique</li>
+<li>Coyote Ugly Bar and Nightclub</li>
+<li>Pour 24</li>
+<li>Gallagher's Restaurant</li>
+<li>Gonzalez y Gonzalez</li>
+<li>Soho Village shopping</li>
+<li>Nine Fine Irishmen</li>
+<li>Mezzanine Shopping</li>
+<li>Business Center</li>
+<li>T-Mobile Arena</li>
+</ul>]]></recreation>
+   </hotel></hotels>
+

@@ -1,12 +1,12 @@
 <?php
 
-set_time_limit(300 );
+set_time_limit(0 ); /* sinon en prod on touche la fin rapidement */
 
 $sapi_type = php_sapi_name();
 
 require 'config.php';
 
-if ($env === PROD && substr($sapi_type, 0, 3) == 'CLI') {
+if (ENV === PROD && substr($sapi_type, 0, 3) == 'CLI') { /* en prod seul le lancement en ligne de commande est possible */
     echo 'Error: Execution is command line restricted.'.PHP_EOL;
     exit(-1);
 }
