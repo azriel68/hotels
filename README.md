@@ -23,7 +23,21 @@ Tout le code a été pensé pour être réexploitable dans le cadre d'autre impo
 
 **Commande pour lancer l'import**
 
-Le paquet php-xml est nécessaire. Le code est orienté PHP 5 ne connaissant pas l'architecture de déploiement.
+Le paquet php-xml est nécessaire. Sous debian (postulat d'un LAMP déjà installé) :
+
+PHP 7
+
+```
+apt install php-xml
+```
+
+PHP 5 ou et/ou débian plus ancien
+```
+apt-get install php5-xml
+```
+
+
+Le code est orienté PHP 5 ne connaissant pas l'architecture de déploiement.
 
 En mode développement, dans config.php, attribuer DEV à $env
 Pour passer en production et utiliser la vraie url d'appel, attribuer PROD a $env
