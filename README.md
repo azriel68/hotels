@@ -13,9 +13,11 @@ l'ensemble pour un si petit test), mais utile à l'usage, comme
 les traits et les namespaces ou les regex. J'ai aussi subdivider au maximum les éléments. Sur un dev "pressé"
 j'aurais sûrement fait plus simple comme architecture allant plus au fonctionnel qu'à l'esthétique.
 
-J'ai assumé que certaines données n'étaient pas structurées mais présentes dans les textes descriptifs de l'annonce (comme la présence d'un parking, d'une piscine, etc).
-J'ai également pris partie de considérer que introduction_text et introduction_media n'était pas des données
-unitaire mais de possible tableaux de par l'analyse de leur nature. En temps normal j'aurais vérifier ces données avec le chef de projet.
+J'ai assumé que certaines données n'étaient pas structurées mais présentes dans les textes descriptifs de 
+l'annonce (comme la présence d'un parking, d'une piscine, etc) n'ayant pas trouvé la spec du XML sur le site de bonotel.
+J'ai également pris parti de considérer que introduction_text et introduction_media n'était pas des données
+unitaire mais de possible tableaux de par l'analyse de leur nature. Egalement que distribution était rapport à une 
+donnée voyagiste. En temps normal j'aurais vérifier ces données avec le chef de projet.
 
 Tout le code a été pensé pour être réexploitable dans le cadre d'autre import de l'objet Hotel.
 
